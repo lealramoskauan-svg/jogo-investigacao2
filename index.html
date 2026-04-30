@@ -6,44 +6,236 @@
 
 <style>
 body{
-    margin:0;
-    background:#111;
-    color:white;
-    font-family:-apple-system;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+margin:0;
+font-family:-apple-system;
+background:#111;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:white;
 }
 
-.menu{
-    text-align:center;
-}
+.screen{display:none;}
+.active{display:block}
 
+/* MENU */
+.menu{text-align:center;}
 .btn{
-    display:block;
-    margin:15px;
-    padding:15px;
-    background:#222;
-    border-radius:10px;
-    cursor:pointer;
+margin:10px;
+padding:15px;
+background:#222;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* PHONE */
+.phone{
+width:320px;
+height:640px;
+border-radius:40px;
+overflow:hidden;
+background:url('https://i.imgur.com/8Km9tLL.jpg');
+background-size:cover;
+position:relative;
+}
+
+/* LOCK */
+.lock{
+text-align:center;
+padding-top:120px;
+backdrop-filter:blur(10px);
+height:100%;
+}
+
+.dots{
+font-size:25px;
+letter-spacing:10px;
+margin:20px;
+}
+
+.keypad{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+padding:20px;
+}
+
+.keypad button{
+height:60px;
+border-radius:50%;
+border:none;
+background:rgba(255,255,255,0.3);
+color:white;
+font-size:18px;
+}
+
+/* HOME */
+.home{
+display:none;
+padding:20px;
+}
+
+.apps{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+margin-top:50px;
+text-align:center;
+font-size:25px;
+}
+
+/* APP */
+.app-screen{
+background:white;
+color:black;
+height:100%;
+padding:10px;
+}
+
+.msg-left{
+background:#e5e5ea;
+padding:10px;
+border-radius:10px;
+margin:5px;
+max-width:70%;
+}
+
+.msg-right{
+background:#007aff;
+color:white;
+padding:10px;
+border-radius:10px;
+margin:5px;
+margin-left:auto;
+max-width:70%;
 }
 </style>
 </head>
 
 <body>
 
-<div class="menu">
-    <h2>Selecionar Celular</h2>
+<!-- MENU -->
+<div id="menu" class="screen active menu">
+<h2>Selecionar Celular</h2>
+<div class="btn" onclick="abrirCel()">Celular 1</div>
+<div class="btn" onclick="abrirCel()">Celular 2</div>
+<div class="btn" onclick="abrirCel()">Celular 3</div>
+</div>
 
-    <div class="btn" onclick="go('celular1.html')">Celular 1</div>
-    <div class="btn" onclick="go('celular2.html')">Celular 2</div>
-    <div class="btn" onclick="go('celular3.html')">Celular 3</div>
+<!-- CELULAR -->
+<div id="celular" class="screen">
+
+<div class="phone">
+
+<div id="lock" class="lock">
+<h3>Digite a senha</h3>
+<div id="dots">○ ○ ○ ○</div>
+
+<div class="keypad">
+<button onclick="press(1)">1</button>
+<button onclick="press(2)">2</button>
+<button onclick="press(3)">3</button>
+<button onclick="press(4)">4</button>
+<button onclick="press(5)">5</button>
+<button onclick="press(6)">6</button>
+<button onclick="press(7)">7</button>
+<button onclick="press(8)">8</button>
+<button onclick="press(9)">9</button>
+<button onclick="reset()">←</button>
+<button onclick="press(0)">0</button>
+</div>
+</div>
+
+<div id="home" class="home">
+<div class="apps">
+<div onclick="openApp('msg')">💬</div>
+<div>📸</div>
+<div>📞</div>
+<div>📝</div>
+</div>
+</div>
+
+</div>
+
+<br>
+<button onclick="voltar()">← voltar</button>
+
+</div>
+
+<!-- MENSAGENS -->
+<div id="msg" class="screen">
+<div class="phone">
+
+<div class="app-screen">
+<h3>Mensagens</h3>
+
+<div class="msg-left">Você viu ele ontem?</div>
+<div class="msg-right">Vi… ele tava estranho.</div>
+<div class="msg-left">Acho que tem algo errado.</div>
+
+</div>
+
+</div>
+
+<button onclick="fecharApp()">← voltar</button>
 </div>
 
 <script>
-function go(page){
-    window.location.href = page;
+let senha="1234";
+let entrada="";
+
+function abrirCel(){
+document.getElementById("menu").classList.remove("active");
+document.getElementById("celular").classList.add("active");
+}
+
+function voltar(){
+document.getElementById("celular").classList.remove("active");
+document.getElementById("menu").classList.add("active");
+reset();
+document.getElementById("home").style.display="none";
+document.getElementById("lock").style.display="block";
+}
+
+function press(n){
+if(entrada.length<4){
+entrada+=n;
+update();
+}
+
+if(entrada.length===4){
+if(entrada===senha){
+document.getElementById("lock").style.display="none";
+document.getElementById("home").style.display="block";
+}else{
+alert("senha errada");
+reset();
+}
+}
+}
+
+function update(){
+let d="";
+for(let i=0;i<4;i++){
+d+= i<entrada.length ? "● " : "○ ";
+}
+document.getElementById("dots").innerText=d;
+}
+
+function reset(){
+entrada="";
+update();
+}
+
+function openApp(app){
+document.getElementById("celular").classList.remove("active");
+document.getElementById(app).classList.add("active");
+}
+
+function fecharApp(){
+document.getElementById("msg").classList.remove("active");
+document.getElementById("celular").classList.add("active");
 }
 </script>
 
