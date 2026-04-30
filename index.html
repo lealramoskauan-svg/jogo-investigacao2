@@ -16,11 +16,10 @@ height:100vh;
 color:white;
 }
 
-/* TELAS */
+/* MENU */
 .screen{display:none;}
 .active{display:block}
 
-/* MENU */
 .menu{text-align:center;}
 .btn{
 margin:10px;
@@ -36,10 +35,16 @@ width:320px;
 height:640px;
 border-radius:40px;
 overflow:hidden;
-background:url('https://images.unsplash.com/photo-1603791440384-56cd371ee9a7');
-background-size:cover;
 position:relative;
-box-shadow:0 20px 60px rgba(0,0,0,0.6);
+box-shadow:0 20px 60px rgba(0,0,0,0.7);
+border:4px solid rgba(255,255,255,0.15);
+
+/* WALLPAPER ABSTRATO */
+background:
+radial-gradient(circle at 20% 30%, rgba(0,200,255,0.25), transparent 40%),
+radial-gradient(circle at 80% 70%, rgba(255,0,150,0.18), transparent 45%),
+radial-gradient(circle at 50% 50%, rgba(0,255,120,0.12), transparent 50%),
+#050505;
 }
 
 /* NOTCH */
@@ -81,7 +86,7 @@ background:rgba(0,0,0,0.25);
 backdrop-filter:blur(10px);
 }
 
-/* LOCK SCREEN */
+/* LOCK */
 .lock{
 text-align:center;
 padding-top:140px;
@@ -129,22 +134,23 @@ text-align:center;
 font-size:35px;
 }
 
-/* BOTTOM NAV */
-.bottom-buttons{
+/* DOCK BAR */
+.dock-bar{
 position:absolute;
-bottom:25px;
+bottom:80px;
+left:0;
 width:100%;
+height:60px;
+background:rgba(0,0,0,0.75);
+backdrop-filter:blur(10px);
+border-top:1px solid rgba(255,255,255,0.1);
 display:flex;
 justify-content:space-around;
+align-items:center;
 font-size:22px;
-color:white;
-opacity:0.9;
 }
 
-.bottom-buttons div{
-cursor:pointer;
-}
-
+/* HOME BAR */
 .homebar{
 position:absolute;
 bottom:8px;
@@ -157,7 +163,7 @@ border-radius:10px;
 opacity:0.7;
 }
 
-/* SHAKING */
+/* SHAKE */
 @keyframes shake {
 0% { transform: translateX(0); }
 20% { transform: translateX(-8px); }
@@ -240,8 +246,8 @@ animation: pop 0.2s ease;
 </div>
 </div>
 
-<!-- BOTÕES INFERIORES -->
-<div class="bottom-buttons">
+<!-- DOCK -->
+<div class="dock-bar">
 <div onclick="voltar()">⬅</div>
 <div onclick="unlockFake()">⬤</div>
 <div>➤</div>
@@ -250,20 +256,19 @@ animation: pop 0.2s ease;
 <div class="homebar"></div>
 
 </div>
-</div>
 
 <script>
 
-let senha = "1234";
-let entrada = "";
+let senha="1234";
+let entrada="";
 
-/* ABRIR CELULAR */
+/* MENU */
 function abrirCel(){
 document.getElementById("menu").classList.remove("active");
 document.getElementById("celular").classList.add("active");
 }
 
-/* VOLTAR MENU */
+/* VOLTAR */
 function voltar(){
 document.getElementById("celular").classList.remove("active");
 document.getElementById("menu").classList.add("active");
@@ -273,7 +278,7 @@ document.getElementById("home").style.display="none";
 document.getElementById("lock").style.display="block";
 }
 
-/* DIGITAR SENHA */
+/* DIGITAR */
 function press(n){
 
 if(entrada.length < 4){
@@ -282,7 +287,7 @@ update(true);
 }
 
 if(entrada.length === 4){
-setTimeout(() => {
+setTimeout(()=>{
 if(entrada === senha){
 unlock();
 }else{
@@ -292,9 +297,9 @@ wrong();
 }
 }
 
-/* UPDATE DOS DOTS */
+/* DOTS */
 function update(animate=false){
-let d = "";
+let d="";
 
 for(let i=0;i<4;i++){
 let filled = i < entrada.length ? "●" : "○";
@@ -306,7 +311,7 @@ d += filled + " ";
 }
 }
 
-document.getElementById("dots").innerHTML = d;
+document.getElementById("dots").innerHTML=d;
 }
 
 /* RESET */
@@ -315,7 +320,7 @@ entrada="";
 update();
 }
 
-/* DESBLOQUEIO */
+/* DESBLOQUEAR */
 function unlock(){
 document.getElementById("lock").style.opacity="0";
 document.getElementById("lock").style.transform="scale(1.1)";
@@ -326,9 +331,9 @@ document.getElementById("home").style.display="block";
 },300);
 }
 
-/* ERRO SENHA */
+/* ERRO */
 function wrong(){
-let lock = document.getElementById("lock");
+let lock=document.getElementById("lock");
 lock.classList.add("shake");
 
 setTimeout(()=>{
@@ -337,7 +342,7 @@ reset();
 },400);
 }
 
-/* BOTÃO HOME FAKE */
+/* HOME FAKE */
 function unlockFake(){
 document.getElementById("lock").style.display="none";
 document.getElementById("home").style.display="block";
