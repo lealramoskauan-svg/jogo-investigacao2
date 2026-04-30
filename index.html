@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Investigação</title>
+
+<style>
+body{
+    margin:0;
+    background:#111;
+    color:white;
+    font-family:-apple-system;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.menu{
+    text-align:center;
+}
+
+.btn{
+    display:block;
+    margin:15px;
+    padding:15px;
+    background:#222;
+    border-radius:10px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="menu">
+    <h2>Selecionar Celular</h2>
+
+    <div class="btn" onclick="go('celular1.html')">Celular 1</div>
+    <div class="btn" onclick="go('celular2.html')">Celular 2</div>
+    <div class="btn" onclick="go('celular3.html')">Celular 3</div>
+</div>
+
+<script>
+function go(page){
+    window.location.href = page;
+}
+</script>
+
+</body>
+</html>
