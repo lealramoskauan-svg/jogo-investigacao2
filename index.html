@@ -19,6 +19,10 @@ height:100vh;
 color:white;
 }
 
+/* TELAS */
+.screen{display:none;}
+.active{display:block}
+
 /* CELULAR */
 .phone{
 width:320px;
@@ -60,35 +64,33 @@ border-radius:50%;
 border:2px solid #444;
 }
 
-/* 🔝 STATUS BAR AJUSTADA */
+/* STATUS BAR */
 .status{
 position:absolute;
 top:0;
 width:100%;
-padding:10px 18px; /* 👈 mais espaço interno */
+padding:10px 14px;
 font-size:14px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-color:white;
 background:rgba(0,0,0,0.35);
 backdrop-filter:blur(12px);
 }
 
-/* 👇 AGRUPA ÍCONES DIREITA (WIFI + BATERIA MAIS PRA ESQUERDA VISUALMENTE) */
+/* 🔋 BATERIA CORRIGIDA (MAIS PRA ESQUERDA E VISÍVEL) */
 .right-icons{
 display:flex;
 align-items:center;
-gap:8px;
-margin-right:8px; /* 👈 puxa tudo um pouco pra esquerda */
+gap:6px;
+margin-right:18px; /* 👈 puxado pra esquerda */
 }
 
-/* bateria corrigida */
 .battery{
 display:inline-block;
 transform:rotate(90deg);
 color:white;
-font-size:15px;
+font-size:16px;
 }
 
 /* LOCK */
@@ -121,7 +123,7 @@ color:white;
 font-size:18px;
 }
 
-/* HOME */
+/* HOME APPS */
 .apps{
 display:grid;
 grid-template-columns:repeat(4,1fr);
@@ -132,7 +134,7 @@ font-size:30px;
 padding:20px;
 }
 
-/* 📱 DOCK FIXA (CARCAÇA DO CELULAR) */
+/* DOCK FIXA */
 .dock-bar{
 position:absolute;
 bottom:0;
@@ -145,7 +147,7 @@ display:flex;
 justify-content:space-around;
 align-items:center;
 font-size:22px;
-z-index:999; /* 👈 SEMPRE POR CIMA */
+z-index:999;
 }
 
 /* HOME BAR */
@@ -159,10 +161,9 @@ height:5px;
 background:white;
 border-radius:10px;
 opacity:0.7;
-z-index:1000;
 }
 
-/* APP BLOCK */
+/* BLOCK */
 .block-screen{
 position:absolute;
 top:0;
@@ -193,11 +194,7 @@ text-align:center;
 
 <div class="phone">
 
-<div class="notch">
-<div class="camera"></div>
-</div>
-
-<!-- STATUS BAR AJUSTADA -->
+<!-- STATUS -->
 <div class="status">
 <span>🔔 9:41</span>
 
@@ -219,19 +216,19 @@ text-align:center;
 <div onclick="openFake()">⚙️</div>
 </div>
 
-<!-- APP BLOCK -->
+<!-- BLOCK -->
 <div id="block" class="block-screen">
 <div class="block-card">
 <h2>⚠️ Aplicativo em análise</h2>
-<p>Este aplicativo foi identificado no dispositivo apreendido e está temporariamente bloqueado.</p>
+<p>Este aplicativo foi bloqueado pela equipe de investigação.</p>
 </div>
 </div>
 
-<!-- DOCK FIXA (NÃO SOME MAIS) -->
+<!-- DOCK -->
 <div class="dock-bar">
-<div>⬅</div>
+<div onclick="turnOff()">⬅</div>
 <div onclick="unlockFake()">⬤</div>
-<div>➤</div>
+<div onclick="goLock()">➤</div>
 </div>
 
 <div class="homebar"></div>
@@ -240,12 +237,26 @@ text-align:center;
 
 <script>
 
+/* abre app bloqueado */
 function openFake(){
 document.getElementById("block").style.display="flex";
 }
 
+/* fecha app */
 function unlockFake(){
 document.getElementById("block").style.display="none";
+}
+
+/* ➡ volta pra tela de bloqueio */
+function goLock(){
+document.getElementById("block").style.display="none";
+alert("Voltando para tela de bloqueio...");
+}
+
+/* ⬅ desliga (volta menu) */
+function turnOff(){
+alert("Celular desligado");
+location.reload(); // simula desligar
 }
 
 </script>
