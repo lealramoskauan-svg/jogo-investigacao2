@@ -1,293 +1,48 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<title>Investigação</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
-<style>
-
-body{
-margin:0;
-font-family:'Inter', sans-serif;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-transition:0.4s;
-}
-
-/* fundo muda */
-body.on{
-background:#111;
-}
-
-body.off{
-background:#fff;
-}
-
-/* BOTÃO EXTERNO (FORA DO CELULAR) */
-.power-panel{
-position:absolute;
-top:20px;
-right:20px;
-background:rgba(0,0,0,0.4);
-backdrop-filter:blur(10px);
-border:1px solid rgba(255,255,255,0.2);
-border-radius:16px;
-padding:12px 14px;
-color:white;
-display:flex;
-align-items:center;
-gap:10px;
-cursor:pointer;
-transition:0.3s;
-}
-
-body.off .power-panel{
-color:black;
-background:rgba(255,255,255,0.6);
-}
-
-/* CELULAR */
-.phone{
-width:320px;
-height:640px;
-border-radius:40px;
-overflow:hidden;
-position:relative;
-border:4px solid rgba(255,255,255,0.15);
-box-shadow:0 20px 60px rgba(0,0,0,0.7);
-transition:0.4s;
-}
-
-/* desligado */
-.phone.off-screen{
-background:black !important;
-}
-
-/* WALLPAPER */
-.phone{
-background:
-radial-gradient(circle at 30% 30%, rgba(0,180,255,0.35), transparent 45%),
-radial-gradient(circle at 70% 70%, rgba(0,80,255,0.25), transparent 50%),
-#050b1a;
-}
-
-/* NOTCH + CÂMERA (VOLTOU DEFINITIVO) */
-.notch{
-position:absolute;
-top:0;
-left:50%;
-transform:translateX(-50%);
-width:140px;
-height:25px;
-background:#000;
-border-bottom-left-radius:20px;
-border-bottom-right-radius:20px;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:10;
-}
-
-.camera{
-width:9px;
-height:9px;
-background:#1a1a1a;
-border-radius:50%;
-border:2px solid #444;
-}
-
-/* STATUS */
-.status{
-position:absolute;
-top:0;
-width:100%;
-padding:10px 14px;
-font-size:14px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-color:white;
-background:rgba(0,0,0,0.35);
-backdrop-filter:blur(12px);
-}
-
-/* BATERIA */
-.battery{
-transform:rotate(90deg);
-color:white;
-}
-
-/* LOCK */
-.lock{
-text-align:center;
-padding-top:140px;
-height:100%;
-color:white;
-}
-
-/* APP AREA */
-.apps{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:25px;
-margin-top:80px;
-text-align:center;
-font-size:30px;
-padding:20px;
-}
-
-/* DOCK */
-.dock-bar{
-position:absolute;
-bottom:0;
-left:0;
-width:100%;
-height:70px;
-background:rgba(0,0,0,0.75);
-backdrop-filter:blur(10px);
-display:flex;
-justify-content:space-around;
-align-items:center;
-font-size:22px;
-z-index:10;
-}
-
-/* HOME BAR */
-.homebar{
-position:absolute;
-bottom:6px;
-left:50%;
-transform:translateX(-50%);
-width:120px;
-height:5px;
-background:white;
-border-radius:10px;
-opacity:0.7;
-}
-
-/* OVERLAY APP */
-.block-screen{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-display:none;
-justify-content:center;
-align-items:center;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(10px);
-}
-
-.block-card{
-background:rgba(255,255,255,0.08);
-border:1px solid rgba(255,255,255,0.2);
-border-radius:20px;
-padding:20px;
-width:80%;
-text-align:center;
-color:white;
-}
-
-/* SHUTDOWN */
-.off-screen-ui{
-display:none;
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:black;
-z-index:999;
-}
-
-</style>
-</head>
-
-<body class="on">
-
-<!-- 🔌 BOTÃO FORA DO CELULAR -->
-<div class="power-panel" onclick="togglePower()">
-⚡ Power<br><small>Ligar / Desligar</small>
-</div>
-
-<!-- CELULAR -->
-<div id="phone" class="phone">
-
-<div class="notch">
-<div class="camera"></div>
-</div>
-
-<div class="status">
-<span>🔔 9:41</span>
-<span>📶 <span class="battery">🔋</span></span>
-</div>
-
-<!-- HOME -->
-<div class="apps">
-<div>💬</div>
-<div>📸</div>
-<div>📞</div>
-<div>📝</div>
-<div onclick="openFake()">🎮</div>
-<div onclick="openFake()">🧮</div>
-<div onclick="openFake()">📁</div>
-<div onclick="openFake()">⚙️</div>
-</div>
-
-<!-- APP BLOQUEADO -->
-<div id="block" class="block-screen">
-<div class="block-card">
-<h2>⚠️ Aplicativo em análise</h2>
-<p>Este aplicativo está bloqueado pela equipe de investigação.</p>
-</div>
-</div>
-
-<!-- DOCK -->
-<div class="dock-bar">
-<div>⬅</div>
-<div onclick="unlockFake()">⬤</div>
-<div>➤</div>
-</div>
-
-<div class="homebar"></div>
-
-</div>
-
 <script>
 
-let ligado=true;
+let ligado = false;
 
-function togglePower(){
-
-ligado=!ligado;
+function render(){
 
 if(ligado){
-document.body.classList.remove("off");
-document.body.classList.add("on");
-document.getElementById("phone").classList.remove("off-screen");
+
+// 🔵 LIGADO
+document.body.className = "on";
+
+document.getElementById("lock").style.display = "block";
+document.getElementById("apps").style.display = "grid";
+
 }else{
-document.body.classList.remove("on");
-document.body.classList.add("off");
-document.getElementById("phone").classList.add("off-screen");
-document.getElementById("block").style.display="none";
+
+// ⚫ DESLIGADO (estado LIMPO)
+document.body.className = "off";
+
+document.getElementById("lock").style.display = "none";
+document.getElementById("apps").style.display = "none";
+document.getElementById("block").style.display = "none";
+
 }
 }
 
-/* apps fake */
+/* POWER */
+function togglePower(){
+ligado = !ligado;
+render();
+}
+
+/* FAKE APP */
 function openFake(){
-document.getElementById("block").style.display="flex";
+document.getElementById("block").style.display = "flex";
 }
 
 function unlockFake(){
-document.getElementById("block").style.display="none";
+document.getElementById("block").style.display = "none";
 }
 
-</script>
+/* inicializa corretamente */
+window.onload = () => {
+ligado = false;
+render();
+};
 
-</body>
-</html>
+</script>
