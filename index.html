@@ -16,6 +16,7 @@ height:100vh;
 color:white;
 }
 
+/* TELAS */
 .screen{display:none;}
 .active{display:block}
 
@@ -29,7 +30,7 @@ border-radius:10px;
 cursor:pointer;
 }
 
-/* PHONE */
+/* CELULAR */
 .phone{
 width:320px;
 height:640px;
@@ -38,6 +39,32 @@ overflow:hidden;
 background:url('https://images.unsplash.com/photo-1603791440384-56cd371ee9a7');
 background-size:cover;
 position:relative;
+box-shadow:0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* NOTCH */
+.notch{
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+width:140px;
+height:25px;
+background:#000;
+border-bottom-left-radius:20px;
+border-bottom-right-radius:20px;
+z-index:10;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.camera{
+width:8px;
+height:8px;
+background:#222;
+border-radius:50%;
+border:2px solid #333;
 }
 
 /* STATUS BAR */
@@ -45,27 +72,31 @@ position:relative;
 position:absolute;
 top:0;
 width:100%;
-padding:5px 10px;
+padding:5px 12px;
 font-size:12px;
 display:flex;
 justify-content:space-between;
 color:white;
+background:rgba(0,0,0,0.25);
+backdrop-filter:blur(10px);
 }
 
-/* LOCK */
+/* LOCK SCREEN */
 .lock{
 text-align:center;
 padding-top:140px;
 backdrop-filter:blur(10px);
 height:100%;
+transition:0.3s;
 }
 
-.dots{
+#dots{
 font-size:25px;
-letter-spacing:10px;
+letter-spacing:8px;
 margin:20px;
 }
 
+/* KEYBOARD */
 .keypad{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -80,6 +111,7 @@ border:none;
 background:rgba(255,255,255,0.3);
 color:white;
 font-size:18px;
+cursor:pointer;
 }
 
 /* HOME */
@@ -97,31 +129,60 @@ text-align:center;
 font-size:35px;
 }
 
-/* APP */
-.app-screen{
-background:white;
-color:black;
-height:100%;
-padding:10px;
-}
-
-.msg-left{
-background:#e5e5ea;
-padding:10px;
-border-radius:10px;
-margin:5px;
-max-width:70%;
-}
-
-.msg-right{
-background:#007aff;
+/* BOTTOM NAV */
+.bottom-buttons{
+position:absolute;
+bottom:25px;
+width:100%;
+display:flex;
+justify-content:space-around;
+font-size:22px;
 color:white;
-padding:10px;
-border-radius:10px;
-margin:5px;
-margin-left:auto;
-max-width:70%;
+opacity:0.9;
 }
+
+.bottom-buttons div{
+cursor:pointer;
+}
+
+.homebar{
+position:absolute;
+bottom:8px;
+left:50%;
+transform:translateX(-50%);
+width:120px;
+height:5px;
+background:white;
+border-radius:10px;
+opacity:0.7;
+}
+
+/* SHAKING */
+@keyframes shake {
+0% { transform: translateX(0); }
+20% { transform: translateX(-8px); }
+40% { transform: translateX(8px); }
+60% { transform: translateX(-6px); }
+80% { transform: translateX(6px); }
+100% { transform: translateX(0); }
+}
+
+.shake {
+animation: shake 0.4s ease;
+}
+
+/* DOT ANIMATION */
+@keyframes pop {
+0% { transform: scale(1); opacity:0.6; }
+50% { transform: scale(1.4); opacity:1; }
+100% { transform: scale(1); opacity:0.8; }
+}
+
+.dot-pop{
+display:inline-block;
+animation: pop 0.2s ease;
+}
+
 </style>
 </head>
 
@@ -140,11 +201,16 @@ max-width:70%;
 
 <div class="phone">
 
+<div class="notch">
+<div class="camera"></div>
+</div>
+
 <div class="status">
-<span>9:41</span>
+<span>🔔 9:41</span>
 <span>📶 📡 🔋</span>
 </div>
 
+<!-- LOCK -->
 <div id="lock" class="lock">
 <h3>Digite a senha</h3>
 <div id="dots">○ ○ ○ ○</div>
@@ -164,96 +230,119 @@ max-width:70%;
 </div>
 </div>
 
+<!-- HOME -->
 <div id="home" class="home">
 <div class="apps">
-<div onclick="openApp('msg')">💬</div>
+<div>💬</div>
 <div>📸</div>
 <div>📞</div>
 <div>📝</div>
 </div>
 </div>
 
+<!-- BOTÕES INFERIORES -->
+<div class="bottom-buttons">
+<div onclick="voltar()">⬅</div>
+<div onclick="unlockFake()">⬤</div>
+<div>➤</div>
 </div>
 
-<br>
-<button onclick="voltar()">← voltar</button>
+<div class="homebar"></div>
 
 </div>
-
-<!-- MENSAGENS -->
-<div id="msg" class="screen">
-<div class="phone">
-
-<div class="app-screen">
-<h3>Mensagens</h3>
-
-<div class="msg-left">Você viu ele ontem?</div>
-<div class="msg-right">Vi… ele tava estranho.</div>
-<div class="msg-left">Acho que tem algo errado.</div>
-
-</div>
-
-</div>
-
-<button onclick="fecharApp()">← voltar</button>
 </div>
 
 <script>
-let senha="1234";
-let entrada="";
 
+let senha = "1234";
+let entrada = "";
+
+/* ABRIR CELULAR */
 function abrirCel(){
 document.getElementById("menu").classList.remove("active");
 document.getElementById("celular").classList.add("active");
 }
 
+/* VOLTAR MENU */
 function voltar(){
 document.getElementById("celular").classList.remove("active");
 document.getElementById("menu").classList.add("active");
+
 reset();
 document.getElementById("home").style.display="none";
 document.getElementById("lock").style.display="block";
 }
 
+/* DIGITAR SENHA */
 function press(n){
-if(entrada.length<4){
-entrada+=n;
-update();
+
+if(entrada.length < 4){
+entrada += n;
+update(true);
 }
 
-if(entrada.length===4){
-if(entrada===senha){
-document.getElementById("lock").style.display="none";
-document.getElementById("home").style.display="block";
+if(entrada.length === 4){
+setTimeout(() => {
+if(entrada === senha){
+unlock();
 }else{
-alert("senha errada");
-reset();
+wrong();
 }
+},150);
 }
 }
 
-function update(){
-let d="";
+/* UPDATE DOS DOTS */
+function update(animate=false){
+let d = "";
+
 for(let i=0;i<4;i++){
-d+= i<entrada.length ? "● " : "○ ";
+let filled = i < entrada.length ? "●" : "○";
+
+if(animate && i === entrada.length - 1){
+d += `<span class="dot-pop">${filled}</span> `;
+}else{
+d += filled + " ";
 }
-document.getElementById("dots").innerText=d;
 }
 
+document.getElementById("dots").innerHTML = d;
+}
+
+/* RESET */
 function reset(){
 entrada="";
 update();
 }
 
-function openApp(app){
-document.getElementById("celular").classList.remove("active");
-document.getElementById(app).classList.add("active");
+/* DESBLOQUEIO */
+function unlock(){
+document.getElementById("lock").style.opacity="0";
+document.getElementById("lock").style.transform="scale(1.1)";
+
+setTimeout(()=>{
+document.getElementById("lock").style.display="none";
+document.getElementById("home").style.display="block";
+},300);
 }
 
-function fecharApp(){
-document.getElementById("msg").classList.remove("active");
-document.getElementById("celular").classList.add("active");
+/* ERRO SENHA */
+function wrong(){
+let lock = document.getElementById("lock");
+lock.classList.add("shake");
+
+setTimeout(()=>{
+lock.classList.remove("shake");
+reset();
+},400);
 }
+
+/* BOTÃO HOME FAKE */
+function unlockFake(){
+document.getElementById("lock").style.display="none";
+document.getElementById("home").style.display="block";
+}
+
 </script>
 
 </body>
