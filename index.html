@@ -39,7 +39,7 @@ position:relative;
 box-shadow:0 20px 60px rgba(0,0,0,0.7);
 border:4px solid rgba(255,255,255,0.15);
 
-/* 🔵 WALLPAPER AZUL DESFOCADO */
+/* WALLPAPER AZUL */
 background:
 radial-gradient(circle at 30% 30%, rgba(0,180,255,0.35), transparent 45%),
 radial-gradient(circle at 70% 70%, rgba(0,80,255,0.25), transparent 50%),
@@ -72,7 +72,7 @@ border-radius:50%;
 border:2px solid #333;
 }
 
-/* 🔝 STATUS BAR MAIOR */
+/* STATUS BAR */
 .status{
 position:absolute;
 top:0;
@@ -85,6 +85,15 @@ align-items:center;
 color:white;
 background:rgba(0,0,0,0.35);
 backdrop-filter:blur(12px);
+}
+
+/* 🔋 BATERIA BRANCA DEITADA */
+.battery{
+display:inline-block;
+transform: rotate(90deg);
+filter: brightness(0) invert(1);
+font-size:16px;
+margin-left:4px;
 }
 
 /* LOCK */
@@ -135,7 +144,7 @@ text-align:center;
 font-size:35px;
 }
 
-/* 📱 DOCK AGORA RENTE AO FUNDO */
+/* DOCK */
 .dock-bar{
 position:absolute;
 bottom:0;
@@ -212,10 +221,10 @@ animation: pop 0.2s ease;
 <div class="camera"></div>
 </div>
 
-<!-- 🔝 STATUS BAR -->
+<!-- STATUS -->
 <div class="status">
 <span>🔔 9:41</span>
-<span>📶 📡 🔋</span>
+<span>📶 📡 <span class="battery">🔋</span></span>
 </div>
 
 <!-- LOCK -->
@@ -248,7 +257,7 @@ animation: pop 0.2s ease;
 </div>
 </div>
 
-<!-- 📱 DOCK (AGORA EMBAIXO RENTE) -->
+<!-- DOCK -->
 <div class="dock-bar">
 <div onclick="voltar()">⬅</div>
 <div onclick="unlockFake()">⬤</div>
@@ -257,7 +266,6 @@ animation: pop 0.2s ease;
 
 <div class="homebar"></div>
 
-</div>
 </div>
 
 <script>
