@@ -1,48 +1,37 @@
-<script>
+<style>
 
-let ligado = false;
-
-function render(){
-
-if(ligado){
-
-// 🔵 LIGADO
-document.body.className = "on";
-
-document.getElementById("lock").style.display = "block";
-document.getElementById("apps").style.display = "grid";
-
-}else{
-
-// ⚫ DESLIGADO (estado LIMPO)
-document.body.className = "off";
-
-document.getElementById("lock").style.display = "none";
-document.getElementById("apps").style.display = "none";
-document.getElementById("block").style.display = "none";
-
-}
+/* fundo */
+body.off{
+background:#fff;
 }
 
-/* POWER */
-function togglePower(){
-ligado = !ligado;
-render();
+body.on{
+background:#111;
 }
 
-/* FAKE APP */
-function openFake(){
-document.getElementById("block").style.display = "flex";
+/* 🔥 CARCAÇA SEMPRE EXISTE */
+.phone{
+width:320px;
+height:640px;
+border-radius:40px;
+border:4px solid rgba(255,255,255,0.15);
+position:relative;
+box-shadow:0 20px 60px rgba(0,0,0,0.4);
+background:black;
+overflow:hidden;
 }
 
-function unlockFake(){
-document.getElementById("block").style.display = "none";
+/* quando ligado troca wallpaper */
+body.on .phone{
+background:
+radial-gradient(circle at 30% 30%, rgba(0,180,255,0.35), transparent 45%),
+radial-gradient(circle at 70% 70%, rgba(0,80,255,0.25), transparent 50%),
+#050b1a;
 }
 
-/* inicializa corretamente */
-window.onload = () => {
-ligado = false;
-render();
-};
+/* ⚠️ IMPORTANTE: conteúdo interno separado */
+.hidden{
+display:none !important;
+}
 
-</script>
+</style>
