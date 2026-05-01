@@ -35,33 +35,22 @@ radial-gradient(circle at 70% 70%, rgba(0,80,255,0.25), transparent 50%),
 #050b1a;
 }
 
-/* 🔵 BOOT (NOVA TELA) */
-#boot{
+/* 🔴 CÂMERA FRONTAL (CENTRO TOPO) */
+.front-camera{
 position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:black;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-z-index:100;
-text-align:center;
+top:8px;
+left:50%;
+transform:translateX(-50%);
+width:10px;
+height:10px;
+background:#1c1c1c;
+border-radius:50%;
+border:2px solid #444;
+box-shadow:0 0 6px rgba(0,0,0,0.8);
+z-index:15;
 }
 
-#boot h2{
-margin:10px 0;
-font-size:18px;
-}
-
-#boot p{
-font-size:12px;
-opacity:0.6;
-}
-
-/* STATUS */
+/* STATUS BAR */
 .status{
 position:absolute;
 top:0;
@@ -76,11 +65,32 @@ backdrop-filter:blur(12px);
 z-index:5;
 }
 
+/* 🔋 + 📶 ORDEM CORRIGIDA (BATERIA PRIMEIRO) */
+.right-icons{
+display:flex;
+align-items:center;
+gap:6px;
+}
+
 .battery{
 display:inline-block;
 transform:rotate(90deg);
-margin-left:6px;
+font-size:16px;
+color:white;
 }
+
+/* HOME */
+.apps{
+display:none;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+margin-top:80px;
+text-align:center;
+font-size:30px;
+padding:20px;
+}
+
+.apps div{cursor:pointer;}
 
 /* LOCK */
 .lock{
@@ -119,18 +129,21 @@ font-size:18px;
 cursor:pointer;
 }
 
-/* HOME */
-.apps{
-display:none;
-grid-template-columns:repeat(4,1fr);
-gap:25px;
-margin-top:80px;
+/* BOOT */
+#boot{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:100;
 text-align:center;
-font-size:30px;
-padding:20px;
 }
-
-.apps div{cursor:pointer;}
 
 /* BLOCK */
 .block-screen{
@@ -218,7 +231,10 @@ opacity:0.7;
 
 <div class="phone">
 
-<!-- 🚔 BOOT NOVO -->
+<!-- 📷 CAMERA FRONTAL NOVA -->
+<div class="front-camera"></div>
+
+<!-- 🚔 BOOT -->
 <div id="boot">
 <div style="font-size:40px;">🚔</div>
 <h2>Sistema de Investigação</h2>
@@ -228,10 +244,16 @@ opacity:0.7;
 <!-- STATUS -->
 <div class="status">
 <span>🔔 9:41</span>
-<span>📶 <span class="battery">🔋</span></span>
+
+<!-- 🔋 AGORA PRIMEIRO -->
+<div class="right-icons">
+<span class="battery">🔋</span>
+<span>📶</span>
 </div>
 
-<!-- 🔐 LOCK -->
+</div>
+
+<!-- LOCK -->
 <div id="lock" class="lock">
 <h3>Digite a senha</h3>
 <div id="dots">○ ○ ○ ○</div>
@@ -263,7 +285,7 @@ opacity:0.7;
 <div onclick="openFake()">⚙️</div>
 </div>
 
-<!-- APP BLOQUEADO -->
+<!-- BLOCK -->
 <div id="block" class="block-screen">
 <div class="block-card">
 
@@ -288,35 +310,28 @@ opacity:0.7;
 
 <script>
 
-let senha="1234";
-let entrada="";
-
-/* BOOT -> LOCK */
+/* BOOT */
 window.onload = () => {
-
 setTimeout(() => {
 document.getElementById("boot").style.display="none";
 document.getElementById("lock").style.display="flex";
 }, 2500);
-
 };
 
-/* teclado */
+let senha="1234";
+let entrada="";
+
 function press(n){
 clickSound();
 if(entrada.length<4){
 entrada+=n;
 update();
 }
-
 if(entrada.length===4){
 setTimeout(()=>{
-if(entrada===senha){
-goHome();
-}else{
-shake();
+if(entrada===senha) goHome();
+else shake();
 reset();
-}
 },200);
 }
 }
@@ -334,7 +349,6 @@ entrada="";
 update();
 }
 
-/* estados */
 function goHome(){
 document.getElementById("lock").style.display="none";
 document.getElementById("home").style.display="grid";
@@ -346,7 +360,6 @@ document.getElementById("lock").style.display="flex";
 reset();
 }
 
-/* app fake */
 function openFake(){
 clickSound();
 document.getElementById("block").style.display="flex";
@@ -356,18 +369,12 @@ function closeFake(){
 document.getElementById("block").style.display="none";
 }
 
-/* shake erro */
 function shake(){
 document.getElementById("lock").style.transform="translateX(-5px)";
-setTimeout(()=>{
-document.getElementById("lock").style.transform="translateX(5px)";
-},80);
-setTimeout(()=>{
-document.getElementById("lock").style.transform="translateX(0)";
-},160);
+setTimeout(()=>document.getElementById("lock").style.transform="translateX(5px)",80);
+setTimeout(()=>document.getElementById("lock").style.transform="translateX(0)",160);
 }
 
-/* som */
 function clickSound(){
 let ctx = new (window.AudioContext || window.webkitAudioContext)();
 let osc = ctx.createOscillator();
