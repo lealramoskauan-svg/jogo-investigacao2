@@ -116,7 +116,7 @@ width:80%;
 text-align:center;
 }
 
-/* ❌ BOTÃO FECHAR */
+/* ❌ BOTÃO FECHAR (BRANCO) */
 .close-x{
 position:absolute;
 top:10px;
@@ -132,6 +132,9 @@ background:rgba(255,255,255,0.15);
 backdrop-filter:blur(8px);
 font-size:14px;
 transition:0.2s;
+
+color:white; /* 👈 AQUI GARANTE QUE FICA BRANCO */
+font-weight:600;
 }
 
 .close-x:hover{
@@ -219,12 +222,10 @@ Acesso temporariamente bloqueado pela equipe de investigação.
 
 <script>
 
-/* abre app bloqueado */
 function openFake(){
 document.getElementById("block").style.display="flex";
 }
 
-/* fecha app com X */
 function closeFake(){
 document.getElementById("block").style.display="none";
 }
