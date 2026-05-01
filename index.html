@@ -26,26 +26,16 @@ height:640px;
 border-radius:40px;
 overflow:hidden;
 position:relative;
+box-shadow:0 20px 60px rgba(0,0,0,0.7);
 border:4px solid rgba(255,255,255,0.15);
-background:#050b1a;
+
+background:
+radial-gradient(circle at 30% 30%, rgba(0,180,255,0.35), transparent 45%),
+radial-gradient(circle at 70% 70%, rgba(0,80,255,0.25), transparent 50%),
+#050b1a;
 }
 
-/* BOOT */
-#boot{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:black;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-z-index:100;
-}
-
-/* CAMERA */
+/* 🔴 CÂMERA FRONTAL (CENTRO TOPO) */
 .front-camera{
 position:absolute;
 top:8px;
@@ -53,10 +43,11 @@ left:50%;
 transform:translateX(-50%);
 width:10px;
 height:10px;
-border-radius:50%;
 background:#1c1c1c;
+border-radius:50%;
 border:2px solid #444;
-z-index:10;
+box-shadow:0 0 6px rgba(0,0,0,0.8);
+z-index:15;
 }
 
 /* STATUS BAR */
@@ -74,18 +65,32 @@ backdrop-filter:blur(12px);
 z-index:5;
 }
 
-/* 🔧 WIFI + BATERIA AJUSTADOS */
+/* 🔋 + 📶 ORDEM CORRIGIDA (BATERIA PRIMEIRO) */
 .right-icons{
 display:flex;
 align-items:center;
-gap:10px;
-margin-left:40px; /* 👈 empurra para longe da câmera */
+gap:6px;
 }
 
 .battery{
+display:inline-block;
 transform:rotate(90deg);
 font-size:16px;
+color:white;
 }
+
+/* HOME */
+.apps{
+display:none;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+margin-top:80px;
+text-align:center;
+font-size:30px;
+padding:20px;
+}
+
+.apps div{cursor:pointer;}
 
 /* LOCK */
 .lock{
@@ -98,6 +103,7 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+z-index:4;
 }
 
 #dots{
@@ -123,19 +129,24 @@ font-size:18px;
 cursor:pointer;
 }
 
-/* HOME */
-.apps{
-display:none;
-grid-template-columns:repeat(4,1fr);
-gap:25px;
-margin-top:80px;
+/* BOOT */
+#boot{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:100;
 text-align:center;
-font-size:30px;
-padding:20px;
 }
 
-/* BLOQUEIO */
-#lockBlock{
+/* BLOCK */
+.block-screen{
 position:absolute;
 top:0;
 left:0;
@@ -144,37 +155,73 @@ height:100%;
 display:none;
 justify-content:center;
 align-items:center;
-background:rgba(0,0,0,0.7);
-z-index:200;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
+z-index:20;
 }
 
 .block-card{
-background:rgba(255,255,255,0.08);
-padding:20px;
-border-radius:15px;
-text-align:center;
 position:relative;
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.2);
+border-radius:20px;
+padding:20px;
+width:80%;
+text-align:center;
 }
 
-/* ❌ X RESTAURADO */
+/* ❌ X AMARELO */
 .close-x{
 position:absolute;
 top:10px;
 right:10px;
-width:24px;
-height:24px;
+width:26px;
+height:26px;
 border-radius:50%;
 display:flex;
 justify-content:center;
 align-items:center;
 cursor:pointer;
-color:#ffcc00;
-font-weight:bold;
 background:rgba(255, 204, 0, 0.15);
+backdrop-filter:blur(8px);
+font-size:14px;
+transition:0.2s;
+color:#ffcc00;
+font-weight:700;
 }
 
 .close-x:hover{
-background:rgba(255, 204, 0, 0.3);
+background:rgba(255, 204, 0, 0.25);
+transform:scale(1.1);
+}
+
+/* DOCK */
+.dock-bar{
+position:absolute;
+bottom:0;
+left:0;
+width:100%;
+height:70px;
+background:rgba(0,0,0,0.75);
+backdrop-filter:blur(10px);
+display:flex;
+justify-content:space-around;
+align-items:center;
+font-size:22px;
+z-index:10;
+cursor:pointer;
+}
+
+.homebar{
+position:absolute;
+bottom:6px;
+left:50%;
+transform:translateX(-50%);
+width:120px;
+height:5px;
+background:white;
+border-radius:10px;
+opacity:0.7;
 }
 
 </style>
@@ -184,34 +231,26 @@ background:rgba(255, 204, 0, 0.3);
 
 <div class="phone">
 
-<!-- CAMERA -->
+<!-- 📷 CAMERA FRONTAL NOVA -->
 <div class="front-camera"></div>
+
+<!-- 🚔 BOOT -->
+<div id="boot">
+<div style="font-size:40px;">🚔</div>
+<h2>Sistema de Investigação</h2>
+<p>Carregando dados do dispositivo...</p>
+</div>
 
 <!-- STATUS -->
 <div class="status">
 <span>🔔 9:41</span>
 
+<!-- 🔋 AGORA PRIMEIRO -->
 <div class="right-icons">
-<span>📶</span>
 <span class="battery">🔋</span>
+<span>📶</span>
 </div>
 
-</div>
-
-<!-- BOOT -->
-<div id="boot">
-<div style="font-size:45px;">🚔</div>
-<h2>Sistema de Investigação</h2>
-<p>Carregando...</p>
-</div>
-
-<!-- LOCK BLOCK -->
-<div id="lockBlock">
-<div class="block-card">
-<div class="close-x" onclick="closeBlock()">✕</div>
-<h3>⛔ Bloqueado</h3>
-<p>Aguarde 10 segundos</p>
-</div>
 </div>
 
 <!-- LOCK -->
@@ -236,48 +275,62 @@ background:rgba(255, 204, 0, 0.3);
 
 <!-- HOME -->
 <div id="home" class="apps">
-<div>💬</div>
-<div>📸</div>
-<div>📞</div>
-<div>📝</div>
-<div>🎮</div>
-<div>🧮</div>
-<div>📁</div>
-<div>⚙️</div>
+<div onclick="clickSound()">💬</div>
+<div onclick="clickSound()">📸</div>
+<div onclick="clickSound()">📞</div>
+<div onclick="clickSound()">📝</div>
+<div onclick="openFake()">🎮</div>
+<div onclick="openFake()">🧮</div>
+<div onclick="openFake()">📁</div>
+<div onclick="openFake()">⚙️</div>
 </div>
+
+<!-- BLOCK -->
+<div id="block" class="block-screen">
+<div class="block-card">
+
+<div class="close-x" onclick="closeFake(); clickSound()">✕</div>
+
+<h2>⚠️ Aplicativo em análise</h2>
+<p>Este aplicativo foi identificado no dispositivo apreendido.<br>Acesso temporariamente bloqueado.</p>
+
+</div>
+</div>
+
+<!-- DOCK -->
+<div class="dock-bar">
+<div onclick="goLock(); clickSound()">⬅</div>
+<div onclick="goHome(); clickSound()">⬤</div>
+<div onclick="clickSound()">➤</div>
+</div>
+
+<div class="homebar"></div>
 
 </div>
 
 <script>
 
-let senha="1234";
-let entrada="";
-let travado=false;
-
 /* BOOT */
 window.onload = () => {
-setTimeout(()=>{
+setTimeout(() => {
 document.getElementById("boot").style.display="none";
 document.getElementById("lock").style.display="flex";
-},2000);
+}, 2500);
 };
 
-/* SENHA */
-function press(n){
-if(travado) return;
+let senha="1234";
+let entrada="";
 
+function press(n){
+clickSound();
 if(entrada.length<4){
 entrada+=n;
 update();
 }
-
 if(entrada.length===4){
 setTimeout(()=>{
-if(entrada===senha){
-goHome();
-}else{
-wrong();
-}
+if(entrada===senha) goHome();
+else shake();
 reset();
 },200);
 }
@@ -301,19 +354,41 @@ document.getElementById("lock").style.display="none";
 document.getElementById("home").style.display="grid";
 }
 
-function wrong(){
-travado=true;
-document.getElementById("lockBlock").style.display="flex";
-
-setTimeout(()=>{
-travado=false;
-document.getElementById("lockBlock").style.display="none";
-},10000);
+function goLock(){
+document.getElementById("home").style.display="none";
+document.getElementById("lock").style.display="flex";
+reset();
 }
 
-function closeBlock(){
-document.getElementById("lockBlock").style.display="none";
-travado=false;
+function openFake(){
+clickSound();
+document.getElementById("block").style.display="flex";
+}
+
+function closeFake(){
+document.getElementById("block").style.display="none";
+}
+
+function shake(){
+document.getElementById("lock").style.transform="translateX(-5px)";
+setTimeout(()=>document.getElementById("lock").style.transform="translateX(5px)",80);
+setTimeout(()=>document.getElementById("lock").style.transform="translateX(0)",160);
+}
+
+function clickSound(){
+let ctx = new (window.AudioContext || window.webkitAudioContext)();
+let osc = ctx.createOscillator();
+let gain = ctx.createGain();
+
+osc.type="sine";
+osc.frequency.value=600;
+gain.gain.value=0.05;
+
+osc.connect(gain);
+gain.connect(ctx.destination);
+
+osc.start();
+osc.stop(ctx.currentTime+0.08);
 }
 
 </script>
