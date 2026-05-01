@@ -27,11 +27,22 @@ border-radius:40px;
 overflow:hidden;
 position:relative;
 border:4px solid rgba(255,255,255,0.15);
-box-shadow:0 20px 60px rgba(0,0,0,0.7);
-background:
-radial-gradient(circle at 30% 30%, rgba(0,180,255,0.35), transparent 45%),
-radial-gradient(circle at 70% 70%, rgba(0,80,255,0.25), transparent 50%),
-#050b1a;
+background:#050b1a;
+}
+
+/* BOOT */
+#boot{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:100;
 }
 
 /* CAMERA */
@@ -42,13 +53,13 @@ left:50%;
 transform:translateX(-50%);
 width:10px;
 height:10px;
-background:#1c1c1c;
 border-radius:50%;
+background:#1c1c1c;
 border:2px solid #444;
-z-index:20;
+z-index:10;
 }
 
-/* STATUS */
+/* STATUS BAR */
 .status{
 position:absolute;
 top:0;
@@ -60,32 +71,23 @@ justify-content:space-between;
 align-items:center;
 background:rgba(0,0,0,0.35);
 backdrop-filter:blur(12px);
-z-index:10;
+z-index:5;
 }
 
-/* SISTEMA STATUS (NOVO) */
-.system-status{
-position:absolute;
-top:28px;
-left:14px;
-font-size:10px;
-opacity:0.6;
-}
-
-/* BATERIA DINÂMICA */
+/* 🔧 WIFI + BATERIA AJUSTADOS */
 .right-icons{
 display:flex;
 align-items:center;
-gap:6px;
+gap:10px;
+margin-left:40px; /* 👈 empurra para longe da câmera */
 }
 
 .battery{
 transform:rotate(90deg);
 font-size:16px;
-transition:0.3s;
 }
 
-/* LOCK ANIMAÇÃO */
+/* LOCK */
 .lock{
 position:absolute;
 top:0;
@@ -96,9 +98,29 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-transition:0.4s ease;
-opacity:1;
-transform:scale(1);
+}
+
+#dots{
+font-size:24px;
+letter-spacing:8px;
+margin:20px;
+}
+
+.keypad{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+padding:20px;
+}
+
+.keypad button{
+height:60px;
+border-radius:50%;
+border:none;
+background:rgba(255,255,255,0.25);
+color:white;
+font-size:18px;
+cursor:pointer;
 }
 
 /* HOME */
@@ -110,17 +132,10 @@ margin-top:80px;
 text-align:center;
 font-size:30px;
 padding:20px;
-transition:0.4s ease;
 }
 
-/* ANIMAÇÃO GLOBAL */
-.fade-out{
-opacity:0;
-transform:scale(1.05);
-}
-
-/* BLOQUEIO APP */
-.block-screen{
+/* BLOQUEIO */
+#lockBlock{
 position:absolute;
 top:0;
 left:0;
@@ -129,51 +144,38 @@ height:100%;
 display:none;
 justify-content:center;
 align-items:center;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(10px);
-z-index:50;
+background:rgba(0,0,0,0.7);
+z-index:200;
 }
 
 .block-card{
-position:relative;
 background:rgba(255,255,255,0.08);
-border-radius:20px;
 padding:20px;
-width:80%;
+border-radius:15px;
 text-align:center;
+position:relative;
 }
 
-/* DOCK */
-.dock-bar{
+/* ❌ X RESTAURADO */
+.close-x{
 position:absolute;
-bottom:0;
-left:0;
-width:100%;
-height:70px;
-background:rgba(0,0,0,0.75);
-backdrop-filter:blur(10px);
+top:10px;
+right:10px;
+width:24px;
+height:24px;
+border-radius:50%;
 display:flex;
-justify-content:space-around;
+justify-content:center;
 align-items:center;
-font-size:22px;
 cursor:pointer;
+color:#ffcc00;
+font-weight:bold;
+background:rgba(255, 204, 0, 0.15);
 }
 
-/* BLUR DINÂMICO */
-.blur{
-filter:blur(8px);
-transition:0.3s;
+.close-x:hover{
+background:rgba(255, 204, 0, 0.3);
 }
-
-/* SHAKE */
-@keyframes shake {
-0%{transform:translateX(0);}
-25%{transform:translateX(-5px);}
-50%{transform:translateX(5px);}
-75%{transform:translateX(-3px);}
-100%{transform:translateX(0);}
-}
-.shake{animation:shake 0.3s;}
 
 </style>
 </head>
@@ -182,6 +184,7 @@ transition:0.3s;
 
 <div class="phone">
 
+<!-- CAMERA -->
 <div class="front-camera"></div>
 
 <!-- STATUS -->
@@ -189,12 +192,27 @@ transition:0.3s;
 <span>🔔 9:41</span>
 
 <div class="right-icons">
-<span id="battery" class="battery">🔋</span>
 <span>📶</span>
-</div>
+<span class="battery">🔋</span>
 </div>
 
-<div class="system-status">Modo investigação ativo</div>
+</div>
+
+<!-- BOOT -->
+<div id="boot">
+<div style="font-size:45px;">🚔</div>
+<h2>Sistema de Investigação</h2>
+<p>Carregando...</p>
+</div>
+
+<!-- LOCK BLOCK -->
+<div id="lockBlock">
+<div class="block-card">
+<div class="close-x" onclick="closeBlock()">✕</div>
+<h3>⛔ Bloqueado</h3>
+<p>Aguarde 10 segundos</p>
+</div>
+</div>
 
 <!-- LOCK -->
 <div id="lock" class="lock">
@@ -218,29 +236,14 @@ transition:0.3s;
 
 <!-- HOME -->
 <div id="home" class="apps">
-<div onclick="clickSound()">💬</div>
-<div onclick="clickSound()">📸</div>
-<div onclick="clickSound()">📞</div>
-<div onclick="clickSound()">📝</div>
-<div onclick="openFake()">🎮</div>
-<div onclick="openFake()">🧮</div>
-<div onclick="openFake()">📁</div>
-<div onclick="openFake()">⚙️</div>
-</div>
-
-<!-- APP BLOQUEADO -->
-<div id="block" class="block-screen">
-<div class="block-card">
-<h2>⚠️ Aplicativo em análise</h2>
-<p>Bloqueado pela equipe de investigação.</p>
-</div>
-</div>
-
-<!-- DOCK -->
-<div class="dock-bar">
-<div onclick="goLock()">⬅</div>
-<div onclick="goHome()">⬤</div>
-<div>➤</div>
+<div>💬</div>
+<div>📸</div>
+<div>📞</div>
+<div>📝</div>
+<div>🎮</div>
+<div>🧮</div>
+<div>📁</div>
+<div>⚙️</div>
 </div>
 
 </div>
@@ -249,11 +252,19 @@ transition:0.3s;
 
 let senha="1234";
 let entrada="";
-let erros=0;
+let travado=false;
+
+/* BOOT */
+window.onload = () => {
+setTimeout(()=>{
+document.getElementById("boot").style.display="none";
+document.getElementById("lock").style.display="flex";
+},2000);
+};
 
 /* SENHA */
 function press(n){
-clickSound();
+if(travado) return;
 
 if(entrada.length<4){
 entrada+=n;
@@ -264,14 +275,11 @@ if(entrada.length===4){
 setTimeout(()=>{
 if(entrada===senha){
 goHome();
-erros=0;
 }else{
-erros++;
-shake();
-reset();
-checkLock();
+wrong();
 }
-},150);
+reset();
+},200);
 }
 }
 
@@ -288,90 +296,24 @@ entrada="";
 update();
 }
 
-/* BLOQUEIO INTELIGENTE */
-function checkLock(){
-if(erros>=3){
-document.getElementById("lock").innerHTML="<h3>Dispositivo bloqueado</h3>";
-}
-}
-
-/* TELA */
 function goHome(){
-switchScreen("home");
-}
-
-function goLock(){
-switchScreen("lock");
-}
-
-/* TRANSIÇÃO SUAVE */
-function switchScreen(screen){
-document.getElementById("lock").classList.add("fade-out");
-document.getElementById("home").classList.add("fade-out");
-
-setTimeout(()=>{
-if(screen==="home"){
 document.getElementById("lock").style.display="none";
 document.getElementById("home").style.display="grid";
-}else{
-document.getElementById("home").style.display="none";
-document.getElementById("lock").style.display="flex";
-}
-document.getElementById("lock").classList.remove("fade-out");
-document.getElementById("home").classList.remove("fade-out");
-},200);
 }
 
-/* APP */
-function openFake(){
-document.getElementById("home").classList.add("blur");
-document.getElementById("block").style.display="flex";
-}
+function wrong(){
+travado=true;
+document.getElementById("lockBlock").style.display="flex";
 
-function clickSound(){
-let ctx = new (window.AudioContext || window.webkitAudioContext)();
-let osc = ctx.createOscillator();
-let gain = ctx.createGain();
-
-osc.type="sine";
-osc.frequency.value=600;
-gain.gain.value=0.05;
-
-osc.connect(gain);
-gain.connect(ctx.destination);
-
-osc.start();
-osc.stop(ctx.currentTime+0.08);
-}
-
-/* BLUR REMOVE */
-document.getElementById("block").addEventListener("click",()=>{
-document.getElementById("block").style.display="none";
-document.getElementById("home").classList.remove("blur");
-});
-
-/* 🔋 BATERIA DINÂMICA */
-function updateBattery(){
-let b=document.getElementById("battery");
-
-let level=100; // simulado
-
-if(level>50){
-b.style.color="white";
-}else if(level>20){
-b.style.color="yellow";
-}else{
-b.style.color="red";
-}
-}
-updateBattery();
-
-/* SHAKE */
-function shake(){
-document.getElementById("lock").classList.add("shake");
 setTimeout(()=>{
-document.getElementById("lock").classList.remove("shake");
-},300);
+travado=false;
+document.getElementById("lockBlock").style.display="none";
+},10000);
+}
+
+function closeBlock(){
+document.getElementById("lockBlock").style.display="none";
+travado=false;
 }
 
 </script>
