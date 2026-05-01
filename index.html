@@ -31,6 +31,47 @@ border:4px solid rgba(255,255,255,0.15);
 background:#050b1a;
 }
 
+/* 📷 CAMERA FRONTAL (RESTAURADA) */
+.front-camera{
+position:absolute;
+top:8px;
+left:50%;
+transform:translateX(-50%);
+width:10px;
+height:10px;
+background:#1c1c1c;
+border-radius:50%;
+border:2px solid #444;
+z-index:50;
+}
+
+/* 📶 STATUS BAR COMPLETA (RESTAURADA) */
+.status{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+padding:10px 14px;
+font-size:13px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(0,0,0,0.35);
+backdrop-filter:blur(12px);
+z-index:40;
+}
+
+.right-icons{
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.battery{
+transform:rotate(90deg);
+font-size:15px;
+}
+
 /* ================= INTRO ================= */
 
 #intro{
@@ -54,40 +95,9 @@ border-radius:18px;
 padding:25px;
 width:80%;
 text-align:center;
-box-shadow:0 20px 60px rgba(0,0,0,0.6);
 }
 
-.sigil{
-width:55px;
-height:55px;
-margin:0 auto 10px;
-border:2px solid #4aa3ff;
-transform:rotate(45deg);
-position:relative;
-}
-
-.sigil::before,.sigil::after{
-content:"";
-position:absolute;
-background:#4aa3ff;
-}
-
-.sigil::before{width:2px;height:55px;left:50%;top:0;transform:translateX(-50%);}
-.sigil::after{height:2px;width:55px;top:50%;left:0;transform:translateY(-50%);}
-
-.intro-title{
-font-size:14px;
-letter-spacing:2px;
-margin-top:10px;
-}
-
-.intro-sub{
-font-size:11px;
-opacity:0.7;
-margin-top:5px;
-}
-
-/* BAR (CORRIGIDA) */
+/* BAR */
 .bar{
 width:100%;
 height:10px;
@@ -113,23 +123,6 @@ animation:load 2.2s linear forwards;
 100%{width:100%;}
 }
 
-/* ================= BOOT ================= */
-
-#boot{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:black;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-z-index:100;
-text-align:center;
-}
-
 /* ================= LOCK ================= */
 
 #lock{
@@ -142,6 +135,7 @@ display:none;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+z-index:10;
 }
 
 #dots{
@@ -180,7 +174,7 @@ text-align:center;
 width:100%;
 }
 
-/* ================= BLOCK (AVISO CANVA FIX) ================= */
+/* ================= BLOCK ================= */
 
 .block-screen{
 position:absolute;
@@ -204,7 +198,6 @@ border-radius:22px;
 padding:22px;
 width:80%;
 text-align:center;
-box-shadow:0 20px 60px rgba(0,0,0,0.6);
 }
 
 /* X */
@@ -222,15 +215,9 @@ cursor:pointer;
 background:rgba(255, 204, 0, 0.15);
 color:#ffcc00;
 font-weight:700;
-transition:0.2s;
 }
 
-.close-x:hover{
-transform:scale(1.1);
-background:rgba(255, 204, 0, 0.25);
-}
-
-/* ALERT ICON */
+/* ⚠️ ICON */
 .warn-icon{
 width:42px;
 height:42px;
@@ -243,8 +230,6 @@ content:"";
 position:absolute;
 left:50%;
 transform:translateX(-50%);
-width:0;
-height:0;
 border-left:18px solid transparent;
 border-right:18px solid transparent;
 border-bottom:32px solid #ffcc00;
@@ -256,39 +241,11 @@ position:absolute;
 left:50%;
 top:7px;
 transform:translateX(-50%);
-font-size:18px;
 font-weight:900;
 color:#111;
 }
 
-/* ================= DOCK ================= */
-
-.dock-bar{
-position:absolute;
-bottom:0;
-left:0;
-width:100%;
-height:70px;
-background:rgba(0,0,0,0.75);
-backdrop-filter:blur(10px);
-display:flex;
-justify-content:space-around;
-align-items:center;
-font-size:22px;
-z-index:10;
-}
-
-.homebar{
-position:absolute;
-bottom:6px;
-left:50%;
-transform:translateX(-50%);
-width:120px;
-height:5px;
-background:white;
-border-radius:10px;
-opacity:0.7;
-}
+/* ================= SOM ================= */
 
 </style>
 </head>
@@ -297,26 +254,25 @@ opacity:0.7;
 
 <div class="phone">
 
+<!-- CAMERA -->
+<div class="front-camera"></div>
+
+<!-- STATUS BAR -->
+<div class="status">
+<span>🔔 9:41</span>
+<div class="right-icons">
+<span>📶</span>
+<span class="battery">🔋</span>
+</div>
+</div>
+
 <!-- INTRO -->
 <div id="intro">
 <div class="intro-card">
-
-<div class="sigil"></div>
-
-<div class="intro-title">DEPARTAMENTO DE INVESTIGAÇÃO</div>
-<div class="intro-sub">Verificando permissões...</div>
-
-<div class="bar">
-<div class="bar-fill" id="bar"></div>
+<h3>Departamento de Investigação</h3>
+<p>Verificando permissões...</p>
+<div class="bar"><div class="bar-fill" id="bar"></div></div>
 </div>
-
-</div>
-</div>
-
-<!-- BOOT -->
-<div id="boot">
-<h3>Sistema de Investigação</h3>
-<p>Carregando dados...</p>
 </div>
 
 <!-- LOCK -->
@@ -341,70 +297,67 @@ opacity:0.7;
 
 <!-- HOME -->
 <div id="home">
-<div>💬</div>
-<div>📸</div>
-<div>📞</div>
-<div>📝</div>
-<div onclick="openFake()">🎮</div>
-<div onclick="openFake()">🧮</div>
-<div onclick="openFake()">📁</div>
-<div onclick="openFake()">⚙️</div>
+<div onclick="clickSound(); openFake()">💬</div>
+<div onclick="clickSound(); openFake()">📸</div>
+<div onclick="clickSound(); openFake()">📞</div>
+<div onclick="clickSound(); openFake()">📝</div>
+<div onclick="clickSound(); openFake()">🎮</div>
+<div onclick="clickSound(); openFake()">🧮</div>
+<div onclick="clickSound(); openFake()">📁</div>
+<div onclick="clickSound(); openFake()">⚙️</div>
 </div>
 
 <!-- BLOCK -->
 <div id="block" class="block-screen">
 <div class="block-card">
-
-<div class="close-x" onclick="closeFake()">✕</div>
-
+<div class="close-x" onclick="closeFake(); clickSound()">✕</div>
 <div class="warn-icon"></div>
-
 <h3>Aplicativo em análise</h3>
-<p>Acesso temporariamente bloqueado.</p>
-
+<p>Acesso bloqueado.</p>
 </div>
 </div>
-
-<!-- DOCK -->
-<div class="dock-bar">
-<div onclick="goLock()">⬅</div>
-<div onclick="goHome()">⬤</div>
-<div>➤</div>
-</div>
-
-<div class="homebar"></div>
 
 </div>
 
 <script>
 
-/* INTRO + BAR FIX */
 window.onload = () => {
 
 let bar = document.getElementById("bar");
+setTimeout(()=>bar.classList.add("active"),100);
 
-setTimeout(() => {
-bar.classList.add("active");
-}, 100);
-
-setTimeout(() => {
+setTimeout(()=>{
 document.getElementById("intro").style.display="none";
-
-setTimeout(() => {
-document.getElementById("boot").style.display="none";
 document.getElementById("lock").style.display="flex";
-}, 2000);
-
-}, 2500);
+},2500);
 
 };
+
+/* 🔊 SOM RESTAURADO */
+function clickSound(){
+let ctx = new (window.AudioContext || window.webkitAudioContext)();
+let osc = ctx.createOscillator();
+let gain = ctx.createGain();
+
+osc.type="sine";
+osc.frequency.value=600;
+gain.gain.value=0.05;
+
+osc.connect(gain);
+gain.connect(ctx.destination);
+
+osc.start();
+osc.stop(ctx.currentTime+0.08);
+}
 
 let senha="1234";
 let entrada="";
 
 function press(n){
+clickSound();
 entrada+=n;
 update();
+
 if(entrada.length===4){
 setTimeout(()=>{
 if(entrada===senha) goHome();
@@ -427,12 +380,6 @@ function reset(){entrada="";update();}
 function goHome(){
 document.getElementById("lock").style.display="none";
 document.getElementById("home").style.display="grid";
-}
-
-function goLock(){
-document.getElementById("home").style.display="none";
-document.getElementById("lock").style.display="flex";
-reset();
 }
 
 function openFake(){
