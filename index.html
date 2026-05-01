@@ -19,9 +19,6 @@ height:100vh;
 color:white;
 }
 
-.screen{display:none;}
-.active{display:block}
-
 /* CELULAR */
 .phone{
 width:320px;
@@ -38,7 +35,7 @@ radial-gradient(circle at 70% 70%, rgba(0,80,255,0.25), transparent 50%),
 #050b1a;
 }
 
-/* NOTCH + CAMERA (CORRIGIDO VISUAL) */
+/* NOTCH */
 .notch{
 position:absolute;
 top:0;
@@ -61,10 +58,9 @@ height:9px;
 background:#1a1a1a;
 border-radius:50%;
 border:2px solid #444;
-box-shadow:0 0 6px rgba(0,0,0,0.6);
 }
 
-/* STATUS BAR */
+/* STATUS */
 .status{
 position:absolute;
 top:0;
@@ -74,48 +70,14 @@ font-size:14px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-color:white;
 background:rgba(0,0,0,0.35);
 backdrop-filter:blur(12px);
 }
 
-/* 🔋 bateria FORÇADA VISÍVEL */
 .battery{
 display:inline-block;
 transform:rotate(90deg);
-color:white;
-font-size:16px;
 margin-left:6px;
-}
-
-/* LOCK */
-.lock{
-text-align:center;
-padding-top:140px;
-height:100%;
-}
-
-#dots{
-font-size:25px;
-letter-spacing:8px;
-margin:20px;
-}
-
-/* KEYBOARD */
-.keypad{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-padding:20px;
-}
-
-.keypad button{
-height:60px;
-border-radius:50%;
-border:none;
-background:rgba(255,255,255,0.25);
-color:white;
-font-size:18px;
 }
 
 /* HOME */
@@ -129,35 +91,7 @@ font-size:30px;
 padding:20px;
 }
 
-/* DOCK */
-.dock-bar{
-position:absolute;
-bottom:0;
-left:0;
-width:100%;
-height:70px;
-background:rgba(0,0,0,0.75);
-backdrop-filter:blur(10px);
-display:flex;
-justify-content:space-around;
-align-items:center;
-font-size:22px;
-z-index:5;
-}
-
-.homebar{
-position:absolute;
-bottom:6px;
-left:50%;
-transform:translateX(-50%);
-width:120px;
-height:5px;
-background:white;
-border-radius:10px;
-opacity:0.7;
-}
-
-/* OVERLAY APP */
+/* BLOCK SCREEN */
 .block-screen{
 position:absolute;
 top:0;
@@ -173,6 +107,7 @@ z-index:20;
 }
 
 .block-card{
+position:relative;
 background:rgba(255,255,255,0.08);
 border:1px solid rgba(255,255,255,0.2);
 border-radius:20px;
@@ -181,26 +116,55 @@ width:80%;
 text-align:center;
 }
 
-.block-card h2{
-font-size:18px;
-margin:10px 0;
+/* ❌ BOTÃO FECHAR */
+.close-x{
+position:absolute;
+top:10px;
+right:10px;
+width:26px;
+height:26px;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(8px);
+font-size:14px;
+transition:0.2s;
 }
 
-.block-card p{
-font-size:13px;
-opacity:0.8;
+.close-x:hover{
+background:rgba(255,255,255,0.3);
 }
 
-/* SHAKE */
-@keyframes shake {
-0%{transform:translateX(0);}
-25%{transform:translateX(-6px);}
-50%{transform:translateX(6px);}
-75%{transform:translateX(-4px);}
-100%{transform:translateX(0);}
+/* DOCK */
+.dock-bar{
+position:absolute;
+bottom:0;
+left:0;
+width:100%;
+height:70px;
+background:rgba(0,0,0,0.75);
+backdrop-filter:blur(10px);
+display:flex;
+justify-content:space-around;
+align-items:center;
+font-size:22px;
+z-index:10;
 }
 
-.shake{animation:shake 0.4s ease;}
+.homebar{
+position:absolute;
+bottom:6px;
+left:50%;
+transform:translateX(-50%);
+width:120px;
+height:5px;
+background:white;
+border-radius:10px;
+opacity:0.7;
+}
 
 </style>
 </head>
@@ -209,38 +173,13 @@ opacity:0.8;
 
 <div class="phone">
 
-<!-- NOTCH -->
-<div class="notch">
-<div class="camera"></div>
-</div>
-
 <!-- STATUS -->
 <div class="status">
 <span>🔔 9:41</span>
 <span>📶 <span class="battery">🔋</span></span>
 </div>
 
-<!-- LOCK -->
-<div id="lock" class="lock">
-<h3>Digite a senha</h3>
-<div id="dots">○ ○ ○ ○</div>
-
-<div class="keypad">
-<button onclick="press(1)">1</button>
-<button onclick="press(2)">2</button>
-<button onclick="press(3)">3</button>
-<button onclick="press(4)">4</button>
-<button onclick="press(5)">5</button>
-<button onclick="press(6)">6</button>
-<button onclick="press(7)">7</button>
-<button onclick="press(8)">8</button>
-<button onclick="press(9)">9</button>
-<button onclick="reset()">←</button>
-<button onclick="press(0)">0</button>
-</div>
-</div>
-
-<!-- HOME -->
+<!-- APPS -->
 <div id="home" class="apps">
 <div>💬</div>
 <div>📸</div>
@@ -252,21 +191,25 @@ opacity:0.8;
 <div onclick="openFake()">⚙️</div>
 </div>
 
-<!-- APP BLOCK -->
+<!-- APP BLOQUEADO -->
 <div id="block" class="block-screen">
 <div class="block-card">
+
+<div class="close-x" onclick="closeFake()">✕</div>
+
 <h2>⚠️ Aplicativo em análise</h2>
 <p>
 Este aplicativo foi identificado no dispositivo apreendido.<br>
 Acesso temporariamente bloqueado pela equipe de investigação.
 </p>
+
 </div>
 </div>
 
 <!-- DOCK -->
 <div class="dock-bar">
-<div onclick="voltar()">⬅</div>
-<div onclick="unlockFake()">⬤</div>
+<div>⬅</div>
+<div>⬤</div>
 <div>➤</div>
 </div>
 
@@ -276,61 +219,14 @@ Acesso temporariamente bloqueado pela equipe de investigação.
 
 <script>
 
-let senha="1234";
-let entrada="";
-
-function press(n){
-if(entrada.length<4){
-entrada+=n;
-update();
-}
-if(entrada.length===4){
-setTimeout(()=>{
-if(entrada===senha) unlock();
-else wrong();
-},150);
-}
-}
-
-function update(){
-let d="";
-for(let i=0;i<4;i++){
-d += i<entrada.length ? "● " : "○ ";
-}
-document.getElementById("dots").innerHTML=d;
-}
-
-function reset(){
-entrada="";
-update();
-}
-
-function unlock(){
-document.getElementById("lock").style.display="none";
-document.getElementById("home").style.display="grid";
-}
-
-function wrong(){
-let lock=document.getElementById("lock");
-lock.classList.add("shake");
-setTimeout(()=>{lock.classList.remove("shake"); reset();},400);
-}
-
-/* 🔧 CORREÇÃO: agora funciona e fecha certo */
+/* abre app bloqueado */
 function openFake(){
 document.getElementById("block").style.display="flex";
 }
 
-function unlockFake(){
+/* fecha app com X */
+function closeFake(){
 document.getElementById("block").style.display="none";
-}
-
-/* 🔧 BOTÃO VOLTAR SEM BUG */
-function voltar(){
-document.getElementById("block").style.display="none";
-document.getElementById("lock").style.display="block";
-document.getElementById("home").style.display="none";
-reset();
 }
 
 </script>
