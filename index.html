@@ -31,7 +31,7 @@ border:4px solid rgba(255,255,255,0.15);
 background:#050b1a;
 }
 
-/* 📷 CAMERA FRONTAL (RESTAURADA) */
+/* CAMERA */
 .front-camera{
 position:absolute;
 top:8px;
@@ -45,7 +45,7 @@ border:2px solid #444;
 z-index:50;
 }
 
-/* 📶 STATUS BAR COMPLETA (RESTAURADA) */
+/* STATUS BAR (🔋 RESTAURADO) */
 .status{
 position:absolute;
 top:0;
@@ -70,6 +70,8 @@ gap:6px;
 .battery{
 transform:rotate(90deg);
 font-size:15px;
+color:white;
+display:inline-block;
 }
 
 /* ================= INTRO ================= */
@@ -95,6 +97,40 @@ border-radius:18px;
 padding:25px;
 width:80%;
 text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* 🕵️ SÍMBOLO RESTAURADO */
+.sigil{
+width:55px;
+height:55px;
+margin:0 auto 10px;
+border:2px solid #4aa3ff;
+transform:rotate(45deg);
+position:relative;
+}
+
+.sigil::before,
+.sigil::after{
+content:"";
+position:absolute;
+background:#4aa3ff;
+}
+
+.sigil::before{
+width:2px;
+height:55px;
+left:50%;
+top:0;
+transform:translateX(-50%);
+}
+
+.sigil::after{
+height:2px;
+width:55px;
+top:50%;
+left:0;
+transform:translateY(-50%);
 }
 
 /* BAR */
@@ -217,36 +253,6 @@ color:#ffcc00;
 font-weight:700;
 }
 
-/* ⚠️ ICON */
-.warn-icon{
-width:42px;
-height:42px;
-margin:0 auto 10px;
-position:relative;
-}
-
-.warn-icon::before{
-content:"";
-position:absolute;
-left:50%;
-transform:translateX(-50%);
-border-left:18px solid transparent;
-border-right:18px solid transparent;
-border-bottom:32px solid #ffcc00;
-}
-
-.warn-icon::after{
-content:"!";
-position:absolute;
-left:50%;
-top:7px;
-transform:translateX(-50%);
-font-weight:900;
-color:#111;
-}
-
-/* ================= SOM ================= */
-
 </style>
 </head>
 
@@ -257,9 +263,10 @@ color:#111;
 <!-- CAMERA -->
 <div class="front-camera"></div>
 
-<!-- STATUS BAR -->
+<!-- STATUS BAR (CORRIGIDA) -->
 <div class="status">
 <span>🔔 9:41</span>
+
 <div class="right-icons">
 <span>📶</span>
 <span class="battery">🔋</span>
@@ -269,9 +276,16 @@ color:#111;
 <!-- INTRO -->
 <div id="intro">
 <div class="intro-card">
+
+<div class="sigil"></div>
+
 <h3>Departamento de Investigação</h3>
 <p>Verificando permissões...</p>
-<div class="bar"><div class="bar-fill" id="bar"></div></div>
+
+<div class="bar">
+<div class="bar-fill" id="bar"></div>
+</div>
+
 </div>
 </div>
 
@@ -297,21 +311,20 @@ color:#111;
 
 <!-- HOME -->
 <div id="home">
-<div onclick="clickSound(); openFake()">💬</div>
-<div onclick="clickSound(); openFake()">📸</div>
-<div onclick="clickSound(); openFake()">📞</div>
-<div onclick="clickSound(); openFake()">📝</div>
-<div onclick="clickSound(); openFake()">🎮</div>
-<div onclick="clickSound(); openFake()">🧮</div>
-<div onclick="clickSound(); openFake()">📁</div>
-<div onclick="clickSound(); openFake()">⚙️</div>
+<div onclick="openFake()">💬</div>
+<div onclick="openFake()">📸</div>
+<div onclick="openFake()">📞</div>
+<div onclick="openFake()">📝</div>
+<div onclick="openFake()">🎮</div>
+<div onclick="openFake()">🧮</div>
+<div onclick="openFake()">📁</div>
+<div onclick="openFake()">⚙️</div>
 </div>
 
 <!-- BLOCK -->
 <div id="block" class="block-screen">
 <div class="block-card">
-<div class="close-x" onclick="closeFake(); clickSound()">✕</div>
-<div class="warn-icon"></div>
+<div class="close-x" onclick="closeFake()">✕</div>
 <h3>Aplicativo em análise</h3>
 <p>Acesso bloqueado.</p>
 </div>
@@ -333,28 +346,10 @@ document.getElementById("lock").style.display="flex";
 
 };
 
-/* 🔊 SOM RESTAURADO */
-function clickSound(){
-let ctx = new (window.AudioContext || window.webkitAudioContext)();
-let osc = ctx.createOscillator();
-let gain = ctx.createGain();
-
-osc.type="sine";
-osc.frequency.value=600;
-gain.gain.value=0.05;
-
-osc.connect(gain);
-gain.connect(ctx.destination);
-
-osc.start();
-osc.stop(ctx.currentTime+0.08);
-}
-
 let senha="1234";
 let entrada="";
 
 function press(n){
-clickSound();
 entrada+=n;
 update();
 
